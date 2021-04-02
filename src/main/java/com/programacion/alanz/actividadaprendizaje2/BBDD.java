@@ -1,5 +1,6 @@
 package com.programacion.alanz.actividadaprendizaje2;
 
+import com.programacion.alanz.actividadaprendizaje2.dao.CiudadDAO;
 import com.programacion.alanz.actividadaprendizaje2.dao.Conexion;
 import com.programacion.alanz.actividadaprendizaje2.dao.ParqueDAO;
 import com.programacion.alanz.actividadaprendizaje2.domain.Parque;
@@ -19,6 +20,7 @@ public class BBDD {
     private boolean salir;
     private Scanner teclado;
     private ParqueDAO parqueDAO;
+    private CiudadDAO ciudadDAO;
     
     public BBDD(){
         salir = false;
@@ -26,6 +28,7 @@ public class BBDD {
         conexion = new Conexion();
         conexion.conectar();
         parqueDAO = new ParqueDAO(conexion);
+        ciudadDAO = new CiudadDAO(conexion);
     }
     
     public void ejecutar(){ /*Menú de consola*/
@@ -67,18 +70,21 @@ public class BBDD {
         salir = true;
     }
     
-    /*private void buscarParques(){
+    //Preguntará una ciudad/ccaa (dependiendo del valor de "opcion") hasta que reciba una correcta, la cuál devovlera como String.
+    private String existeCiudadCcaa(String ciudadCcaa, String opcion){ 
         try{
-            ArrayList<Parque> parques = parqueDAO.obtenerParques();
-            for (Parque parque : parques){
-                System.out.println(parque);
+            ciudadDAO.existeCiudadCcaa(ciudadCcaa, opcion);
+            while(!ciudadDAO.existeCiudadCcaa(ciudadCcaa, opcion)){
+                System.out.println("La ciudad/ccaa introducida no aparece en la base de datos. Por favor, introudce otra: ");
+                ciudadCcaa = teclado.nextLine().toUpperCase();
+                ciudadDAO.existeCiudadCcaa(ciudadCcaa, opcion);
             }
         } catch (SQLException sqle){
             System.out.println("Se ha producido un error. Inténtelo de nuevo");
             sqle.printStackTrace();
-        }
-        
-    }*/
+        }  
+        return ciudadCcaa;
+    }
     
     private void listarParques(){
         System.out.println("Listar por: ");
@@ -86,25 +92,34 @@ public class BBDD {
         System.out.println("    2.CCAA");
         String opcion = teclado.nextLine();
         String sql;
+        //Si opcion es 1 veremos por ciudades, si es 2 por CCAA
         switch (opcion){
             case "1":
                 sql = "SELECT parque_nombre FROM parques WHERE id_ciudad = ? ORDER BY parque_nombre";
-                verParques(sql);
+                //Guardamos el valor de opcion para verParques()
+                verParques(sql, opcion);
                 break;
             case "2":
                 sql ="SELECT p.parque_nombre FROM parques p INNER JOIN ciudades c ON p.id_ciudad in (SELECT c.id_ciudad from ciudades WHERE c.ccaa = ?)ORDER BY p.parque_nombre";
-                verParques(sql);
+                //Guardamos el valor de opcion para verParques()
+                verParques(sql, opcion);
                 break;
             default:
                 System.out.println("Opcion incorrecta");
         }
     }
     
-    private void verParques(String sql){
+    //Dependiendo de si la opcion es 1 o 2, verá si la ciudad o la ccaa existe y, en caso positivo, los mostrará.
+    private void verParques(String sql, String opcion){
         try{
-            System.out.println("Escriba la abreviatura de la ciudad: ");
-            String abreviatura = teclado.nextLine();
-            ArrayList<Parque> parques = parqueDAO.obtenerParques(abreviatura, sql);
+            if(!opcion.equals("1")){
+                System.out.println("Escriba la CCAA: ");
+            } else {
+                System.out.println("Escriba la abreviatura: ");
+            }
+            String abreviatura = teclado.nextLine().toUpperCase();
+            String idCiudadCcaa = existeCiudadCcaa(abreviatura, opcion);
+            ArrayList<Parque> parques = parqueDAO.obtenerParques(idCiudadCcaa, sql);
             for (Parque parque : parques){
                 System.out.print("       ");
                 System.out.println(parque.getParqueNombre());
@@ -116,23 +131,29 @@ public class BBDD {
             sqle.printStackTrace();
         }
     }
+    
    
     private void registrarParque(){
-        System.out.println("ID");
+        //Al registrar sólo sobre ciudades, la opcion de existeCiudadCcaa será siempre 1, para ciudad.
+        final String opcion = "1"; 
+        
+        System.out.println("¿En qué ciudad quieres registar el parque?(ID): ");
+        String ciudadExiste = teclado.nextLine().toUpperCase();
+        String idCiudad = existeCiudadCcaa(ciudadExiste, opcion);
+        System.out.println("ID del parque: ");
         String id = teclado.nextLine();
-        System.out.println("ID Ciudad");
-        String idCiudad = teclado.nextLine();
-        System.out.println("Nombre");
+        System.out.println("Nombre: ");
         String nombre = teclado.nextLine();
+        System.out.println("Extension: ");
+        String extension = teclado.nextLine();
         //TODO Solicitar resto de campos
         Parque parque = new Parque();
         parque.setParqueId(id);
         parque.setParqueCiudadId(idCiudad);
         parque.setParqueNombre(nombre);
-        
+        parque.setParqueExtension(extension);
         try{
         parqueDAO.registrarParque(parque);
-        System.out.println("El coche se ha registrado correctamente");
         } catch (SQLException sqle){
             System.out.println("Se ha producido un error. Inténtelo de nuevo");
             sqle.printStackTrace();

@@ -22,44 +22,17 @@ public class ParqueDAO {
         
     }
     
-    public boolean existeCiudad(Parque parque) throws SQLException{ /*METER EN FICHERO CiudadDAO*/
-        //Contamos cuantas veces aparece el parqueCiudadId introducido para ver si aparece en la tabla.
-        String ctaSql = "SELECT COUNT(*) FROM ciudades WHERE id_ciudad = ?";
-        int existe;
-        PreparedStatement sentencia = conexion.getConexion().prepareStatement(ctaSql);
-        sentencia.setString(1, parque.getParqueCiudadId());
-        sentencia.executeUpdate();
-        ResultSet resultado = sentencia.executeQuery();
-        //Almacenamos el conteo en "existe", si es mayor que cero es que aparece en la tabla,
-        //si no es que no aparece y por tanto, sacamos mensaje indicandolo.
-        existe = resultado.getInt(1);
-        if (existe > 0){
-            return true;
-        } else {return false;}
-    }
-    
     public void registrarParque(Parque parque) throws SQLException {
-        //Contamos cuantas veces aparece el parqueCiudadId introducido para ver si aparece en la tabla.
-        String ctaSql = "SELECT COUNT(*) FROM ciudades WHERE id_ciudad = ?";
-        int existe;
-        PreparedStatement sentencia = conexion.getConexion().prepareStatement(ctaSql);
-        sentencia.setString(1, parque.getParqueCiudadId());
-        sentencia.executeUpdate();
-        ResultSet resultado = sentencia.executeQuery();
-        //Almacenamos el conteo en "existe", si es mayor que cero es que aparece en la tabla,
-        //si no es que no aparece y por tanto, sacamos mensaje indicandolo.
-        existe = resultado.getInt(1);
-        if (existe > 0){
-            String sql = "INSERT INTO Parques (ID_Parque, ID_Ciudad, Parque_Nombre) VALUES (?, ?, ?)";
-        
+            String sql = "INSERT INTO Parques (ID_Parque, ID_Ciudad, Parque_Nombre, Extension_m2) VALUES (?, ?, ?, ?)";
+            PreparedStatement sentencia = conexion.getConexion().prepareStatement(sql);
+            
             sentencia = conexion.getConexion().prepareStatement(sql);
             sentencia.setString(1, parque.getParqueId());
             sentencia.setString(2, parque.getParqueCiudadId());
             sentencia.setString(3, parque.getParqueNombre());
+            sentencia.setString(4, parque.getParqueExtension());
             sentencia.executeUpdate();
-        } else{
-            System.out.println("La ciudad introducida no aparece en la base de datos, prueba otra: ");
-        }
+            System.out.println("El parque se ha creado correctamente.");
         
     }
     

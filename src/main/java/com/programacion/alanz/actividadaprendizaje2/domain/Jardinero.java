@@ -7,17 +7,15 @@ package com.programacion.alanz.actividadaprendizaje2.domain;
 public class Jardinero {
     String jardineroId;
     String jardineroCuadrillaId;
-    String jardineroJefeId;
     String jardineroNombre;
     String jardineroApellidos;
     String jardineroNumTfno;
     double jardineroSalario;
     String jardineroFechaContr;
 
-    public Jardinero(String jardineroId, String jardineroCuadrillaId, String jardineroJefeId, String jardineroNombre, String jardineroApellidos, String jardineroNumTfno, double jardineroSalario, String jardineroFechaContr) {
+    public Jardinero(String jardineroId, String jardineroCuadrillaId, String jardineroNombre, String jardineroApellidos, String jardineroNumTfno, double jardineroSalario, String jardineroFechaContr) {
         this.jardineroId = jardineroId;
         this.jardineroCuadrillaId = jardineroCuadrillaId;
-        this.jardineroJefeId = jardineroJefeId;
         this.jardineroNombre = jardineroNombre;
         this.jardineroApellidos = jardineroApellidos;
         this.jardineroNumTfno = jardineroNumTfno;
@@ -39,14 +37,6 @@ public class Jardinero {
 
     public void setJardineroCuadrillaId(String jardineroCuadrillaId) {
         this.jardineroCuadrillaId = jardineroCuadrillaId;
-    }
-
-    public String getJardineroJefeId() {
-        return jardineroJefeId;
-    }
-
-    public void setJardineroJefeId(String jardineroJefeId) {
-        this.jardineroJefeId = jardineroJefeId;
     }
 
     public String getJardineroNombre() {
@@ -91,7 +81,7 @@ public class Jardinero {
 
     @Override
     public String toString() {
-        return "Jardinero{" + "jardineroId=" + jardineroId + ", jardineroCuadrillaId=" + jardineroCuadrillaId + ", jardineroJefeId=" + jardineroJefeId + ", jardineroNombre=" + jardineroNombre + ", jardineroApellidos=" + jardineroApellidos + ", jardineroNumTfno=" + jardineroNumTfno + ", jardineroSalario=" + jardineroSalario + ", jardineroFechaContr=" + jardineroFechaContr + '}';
+        return "Jardinero{" + "jardineroId=" + jardineroId + ", jardineroCuadrillaId=" + jardineroCuadrillaId + ", jardineroNombre=" + jardineroNombre + ", jardineroApellidos=" + jardineroApellidos + ", jardineroNumTfno=" + jardineroNumTfno + ", jardineroSalario=" + jardineroSalario + ", jardineroFechaContr=" + jardineroFechaContr + '}';
     }
     
     
