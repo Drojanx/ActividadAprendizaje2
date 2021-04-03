@@ -18,8 +18,20 @@ public class ParqueDAO {
         this.conexion = conexion;
     }
     
-    public void verParque(Parque parque){
+    public boolean existeParque(String nombre) throws SQLException{
+        //Contamos cuantas veces aparece el parqueCiudadId introducido para ver si aparece en la tabla.
+        String ctaSql = "SELECT COUNT(*) FROM parques WHERE parque_nombre = ?";
         
+        int existe;
+        PreparedStatement sentencia = conexion.getConexion().prepareStatement(ctaSql);
+        sentencia.setString(1, nombre);
+        sentencia.executeUpdate();
+        ResultSet resultado = sentencia.executeQuery();
+        resultado.next();
+        //Almacenamos el conteo en "existe", si es mayor que cero es que aparece en la tabla,
+        //si no es que no aparece y por tanto, sacamos mensaje indicandolo.
+        existe = resultado.getInt(1);
+        return existe > 0;
     }
     
     public void registrarParque(Parque parque) throws SQLException {
@@ -36,12 +48,15 @@ public class ParqueDAO {
         
     }
     
-    public void modificarParque(Parque parque) throws SQLException{
-        String sql = "UPDATE Parques SET ID_Ciudad = ? WHERE IC_Parque = ?";
+    //Usa los datos de parqueAux para modificar los de parqueReal
+    public void modificarParque(Parque parqueReal, Parque parqueAux) throws SQLException{
+        String sql = "UPDATE Parques SET parque_nombre = ?, id_ciudad = ?, extension_m2 = ? WHERE parque_nombre = ?";
         
         PreparedStatement sentencia = conexion.getConexion().prepareStatement(sql);
-        sentencia.setString(1, parque.getParqueCiudadId());
-        sentencia.setString(2, parque.getParqueId());
+        sentencia.setString(1, parqueAux.getParqueNombre());
+        sentencia.setString(2, parqueAux.getParqueCiudadId());
+        sentencia.setString(3, parqueAux.getParqueExtension());
+        sentencia.setString(4, parqueReal.getParqueNombre());
         sentencia.executeUpdate();
     }
     
@@ -53,6 +68,7 @@ public class ParqueDAO {
         sentencia.executeUpdate();
     }
     
+    //Obtiene todos los parques
     public ArrayList<Parque> obtenerParques() throws SQLException{
         String sql = "SELECT * FROM Parques";
         ArrayList<Parque> parques = new ArrayList<>();
@@ -72,8 +88,8 @@ public class ParqueDAO {
         return parques;
     }
     
+    //Obtiene parques según la cadena de busqueda que reciba
     public ArrayList<Parque> obtenerParques(String cadenaBusqueda, String sql) throws SQLException{
-        /*sql = "SELECT nombre, id_ciudad, id_parque FROM parques WHERE id_ciudad = ? ORDER BY nombre;";*/
         ArrayList<Parque> parques = new ArrayList<>();
         
         PreparedStatement sentencia = conexion.getConexion().prepareStatement(sql);
@@ -86,6 +102,23 @@ public class ParqueDAO {
             parques.add(parque);
         }
         return parques;
+    }
+    
+    //Obtiene un único parque
+    public Parque obtenerParque(String parqueNombre) throws SQLException{
+        String sql = "SELECT * FROM parques WHERE parque_nombre = ?";
+        Parque parque = new Parque();
+        
+        PreparedStatement sentencia = conexion.getConexion().prepareStatement(sql);
+        sentencia.setString(1, parqueNombre);
+        ResultSet resultado = sentencia.executeQuery();
+        resultado.next();
+        parque.setParqueId(resultado.getString(1));
+        parque.setParqueCiudadId(resultado.getString(2));
+        parque.setParqueNombre(resultado.getString(3));
+        parque.setParqueExtension(resultado.getString(4));
+        
+        return parque;
     }
     
 }

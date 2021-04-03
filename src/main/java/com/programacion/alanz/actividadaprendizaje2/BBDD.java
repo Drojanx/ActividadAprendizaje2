@@ -71,19 +71,28 @@ public class BBDD {
     }
     
     //Preguntará una ciudad/ccaa (dependiendo del valor de "opcion") hasta que reciba una correcta, la cuál devovlera como String.
-    private String existeCiudadCcaa(String ciudadCcaa, String opcion){ 
+    private String existeCiudadCcaaParque(String ciudadCcaaParque, String opcion){ 
         try{
-            ciudadDAO.existeCiudadCcaa(ciudadCcaa, opcion);
-            while(!ciudadDAO.existeCiudadCcaa(ciudadCcaa, opcion)){
-                System.out.println("La ciudad/ccaa introducida no aparece en la base de datos. Por favor, introudce otra: ");
-                ciudadCcaa = teclado.nextLine().toUpperCase();
-                ciudadDAO.existeCiudadCcaa(ciudadCcaa, opcion);
+            if (!opcion.equals("3")){
+                ciudadDAO.existeCiudadCcaa(ciudadCcaaParque, opcion);
+                while(!ciudadDAO.existeCiudadCcaa(ciudadCcaaParque, opcion)){
+                    System.out.println("La ciudad/ccaa introducida no aparece en la base de datos. Por favor, introudce otra: ");
+                    ciudadCcaaParque = teclado.nextLine().toUpperCase();
+                    ciudadDAO.existeCiudadCcaa(ciudadCcaaParque, opcion);
+                }
+            } else{
+                parqueDAO.existeParque(ciudadCcaaParque);
+                while(!parqueDAO.existeParque(ciudadCcaaParque)){
+                    System.out.println("La ciudad/ccaa introducida no aparece en la base de datos. Por favor, introudce otra: ");
+                    ciudadCcaaParque = teclado.nextLine().toUpperCase();
+                    parqueDAO.existeParque(ciudadCcaaParque);
+                }
             }
         } catch (SQLException sqle){
             System.out.println("Se ha producido un error. Inténtelo de nuevo");
             sqle.printStackTrace();
         }  
-        return ciudadCcaa;
+        return ciudadCcaaParque;
     }
     
     private void listarParques(){
@@ -118,7 +127,7 @@ public class BBDD {
                 System.out.println("Escriba la abreviatura: ");
             }
             String abreviatura = teclado.nextLine().toUpperCase();
-            String idCiudadCcaa = existeCiudadCcaa(abreviatura, opcion);
+            String idCiudadCcaa = existeCiudadCcaaParque(abreviatura, opcion);
             ArrayList<Parque> parques = parqueDAO.obtenerParques(idCiudadCcaa, sql);
             for (Parque parque : parques){
                 System.out.print("       ");
@@ -139,11 +148,11 @@ public class BBDD {
         
         System.out.println("¿En qué ciudad quieres registar el parque?(ID): ");
         String ciudadExiste = teclado.nextLine().toUpperCase();
-        String idCiudad = existeCiudadCcaa(ciudadExiste, opcion);
+        String idCiudad = existeCiudadCcaaParque(ciudadExiste, opcion);
         System.out.println("ID del parque: ");
         String id = teclado.nextLine();
         System.out.println("Nombre: ");
-        String nombre = teclado.nextLine();
+        String nombre = teclado.nextLine().toUpperCase();
         System.out.println("Extension: ");
         String extension = teclado.nextLine();
         //TODO Solicitar resto de campos
@@ -160,13 +169,44 @@ public class BBDD {
         }
     }
     
-    private void registrarParqueCiudad(){
-        System.out.println("En qué ciudad quieres registrar el nuevo parque?: ");
-        String ciudad = teclado.nextLine();
-    }
-    
     private void modificarParque(){
-        
+        final String opcion = "3";
+        final String sql = "SELECT * FROM parques WHERE parque_nombre = ?";
+        Parque parqueAux = new Parque(); //Guardaremos en este parque los datos nuevos
+        try{
+            System.out.println("Escriba el nombre del parque: ");
+            String Nombre = teclado.nextLine().toUpperCase();
+            String parqueNombre = existeCiudadCcaaParque(Nombre, opcion);
+            Parque parqueReal = parqueDAO.obtenerParque(parqueNombre);
+            System.out.print("Nombre:       ");
+            System.out.println(parqueReal.getParqueNombre());
+            System.out.print("Ciudad:       ");
+            System.out.println(parqueReal.getParqueCiudadId());
+            System.out.print("Extension:    ");
+            System.out.println(parqueReal.getParqueExtension());
+            System.out.println("--INTRODUCE NUEVOS DATOS--");
+            System.out.println("Nuevo Nombre:       ");
+            parqueAux.setParqueNombre(teclado.nextLine().toUpperCase());
+            System.out.println("Nueva Ciudad:       ");
+            parqueAux.setParqueCiudadId(teclado.nextLine().toUpperCase());
+            System.out.println("Nueva Extension:    ");
+            parqueAux.setParqueExtension(teclado.nextLine().toUpperCase());
+            parqueDAO.modificarParque(parqueReal, parqueAux);
+            
+            parqueReal = parqueDAO.obtenerParque(parqueAux.getParqueNombre());
+            System.out.println("--DATOS ACTUALIZADOS--");
+            System.out.print("Nombre:       ");
+            System.out.println(parqueReal.getParqueNombre());
+            System.out.print("Ciudad:       ");
+            System.out.println(parqueReal.getParqueCiudadId());
+            System.out.print("Extension:    ");
+            System.out.println(parqueReal.getParqueExtension());
+            System.out.println("");
+        }
+        catch (SQLException sqle){
+            System.out.println("Se ha producido un error. Inténtelo de nuevo");
+            sqle.printStackTrace();
+        }
     }
     
     private void eliminarParque(){

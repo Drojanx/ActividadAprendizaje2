@@ -37,21 +37,6 @@ public class CiudadDAO {
         existe = resultado.getInt(1);
         return existe > 0;
     }
-    
-    public boolean existeCcaa(String ccaa) throws SQLException{ /*METER EN FICHERO CiudadDAO*/
-        //Contamos cuantas veces aparece el parqueCiudadId introducido para ver si aparece en la tabla.
-        String ctaSql = "SELECT * FROM ciudades ";
-        int existe;
-        PreparedStatement sentencia = conexion.getConexion().prepareStatement(ctaSql);
-        sentencia.setString(1, ccaa);
-        sentencia.executeUpdate();
-        ResultSet resultado = sentencia.executeQuery();
-        resultado.next();
-        //Almacenamos el conteo en "existe", si es mayor que cero es que aparece en la tabla,
-        //si no es que no aparece y por tanto, sacamos mensaje indicandolo.
-        existe = resultado.getInt(1);
-        return existe > 0;
-    }
 }
 
 
