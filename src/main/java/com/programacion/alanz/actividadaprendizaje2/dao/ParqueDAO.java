@@ -60,11 +60,10 @@ public class ParqueDAO {
         sentencia.executeUpdate();
     }
     
-    public void eliminarParque(String id) throws SQLException{
-        String sql = "DELETE FROM Parques WHERE ID_Parque = ?";
+    public void eliminarParque(String busqueda, String sql) throws SQLException{
         
         PreparedStatement sentencia = conexion.getConexion().prepareStatement(sql);
-        sentencia.setString(1, id);
+        sentencia.setString(1, busqueda);
         sentencia.executeUpdate();
     }
     
@@ -104,7 +103,7 @@ public class ParqueDAO {
         return parques;
     }
     
-    //Obtiene un único parque
+    //Obtiene un único parque según su nombre exacto
     public Parque obtenerParque(String parqueNombre) throws SQLException{
         String sql = "SELECT * FROM parques WHERE parque_nombre = ?";
         Parque parque = new Parque();
@@ -119,6 +118,39 @@ public class ParqueDAO {
         parque.setParqueExtension(resultado.getString(4));
         
         return parque;
+    }
+    
+    //Devolver el número de parques de una determinada ciudad que tengan una extensión individual mayor que la que desee el usuario.
+    public int numParquesExMayor(String ciudad, int extension) throws SQLException{
+        String sql = "SELECT NVL(MAX(COUNT(*)),0) FROM parques WHERE id_ciudad = ? AND extension_m2 > ? GROUP BY ID_CIUDAD";
+        int cuenta;
+        
+        PreparedStatement sentencia = conexion.getConexion().prepareStatement(sql);
+        sentencia.setString(1, ciudad);
+        sentencia.setInt(2, extension);
+        sentencia.executeUpdate();
+        ResultSet resultado = sentencia.executeQuery();
+        resultado.next();
+        //Almacenamos el conteo en "existe", si es mayor que cero es que aparece en la tabla,
+        //si no es que no aparece y por tanto, sacamos mensaje indicandolo.
+        cuenta = resultado.getInt(1);
+        return cuenta;
+    }
+    
+    public ArrayList<Parque> ciudadesExtTotal(int exTotal) throws SQLException{
+        String sql = "SELECT ID_CIUDAD, SUM(EXTENSION_M2) FROM PARQUES GROUP BY ID_CIUDAD HAVING SUM(EXTENSION_M2)> ?" ;
+        ArrayList<Parque> parques = new ArrayList<>();
+        
+        PreparedStatement sentencia = conexion.getConexion().prepareStatement(sql);
+        sentencia.setInt(1, exTotal);
+        ResultSet resultado = sentencia.executeQuery();
+        while (resultado.next()){
+            Parque parque = new Parque();
+            parque.setParqueCiudadId(resultado.getString(1));
+            parque.setParqueExtension(resultado.getString(2));
+            parques.add(parque);
+        }
+        return parques;
     }
     
 }
