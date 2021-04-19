@@ -1,9 +1,5 @@
 package com.programacion.alanz.actividadaprendizaje2.domain;
 
-/**
- *
- * @author droja
- */
 public class Jardinero {
     String jardineroId;
     String jardineroCuadrillaId;
@@ -12,6 +8,10 @@ public class Jardinero {
     String jardineroNumTfno;
     double jardineroSalario;
     String jardineroFechaContr;
+    
+    public Jardinero(){
+        
+    }
 
     public String getJardineroId() {
         return jardineroId;

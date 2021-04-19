@@ -4,10 +4,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-/**
- *
- * @author droja
- */
 public class CiudadDAO {
     
     private Conexion conexion;
@@ -15,8 +11,15 @@ public class CiudadDAO {
     public CiudadDAO(Conexion conexion){
         this.conexion = conexion;
     }
-    
-    public boolean existeCiudadCcaa(String ciudadCcaa, String opcion) throws SQLException{ /*METER EN FICHERO CiudadDAO*/
+    /**
+     * Buscará una ciudad o una comunidad autónoma y determinará si existe
+     * @param ciudadCcaa almacena la abreviatura de una ciudad o el nombre de una   
+     *                   comunidad autónoma
+     * @param opcion almacena "1" si se está buscando una ciudad o "2" si se
+     *               está buscando una comunidad autónoma
+     * @return devuelve un valor booleano para determinar si existe o no
+     */
+    public boolean existeCiudadCcaa(String ciudadCcaa, String opcion) throws SQLException{
         //Contamos cuantas veces aparece el parqueCiudadId introducido para ver si aparece en la tabla.
         String ctaSql;
         if(!opcion.equals("1")){

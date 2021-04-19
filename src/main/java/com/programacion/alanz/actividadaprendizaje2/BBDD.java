@@ -9,10 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-/**
- *
- * @author Alejandro Lanz
- */
+
 public class BBDD {
     
     private Conexion conexion;
@@ -210,20 +207,20 @@ public class BBDD {
                 id = parseInt(teclado.nextLine());                
             } catch(NumberFormatException ex){
                 System.out.println("Debe introducir un numero."); 
+                ex.printStackTrace();
             }
         }
         System.out.println("Nombre: ");
         String nombre = teclado.nextLine().toUpperCase();
         System.out.println("Extension: ");
         String extension = teclado.nextLine();
-        //TODO Solicitar resto de campos
         Parque parque = new Parque();
         parque.setParqueId(Integer.toString(id));
         parque.setParqueCiudadId(idCiudad);
         parque.setParqueNombre(nombre);
         parque.setParqueExtension(extension);
         try{
-        parqueDAO.registrarParque(parque);
+        parqueDAO.registrarParque(parque);//Llamamos al método de parqueDAO para insertar el parque en la base de datos
         } catch (SQLException sqle){
             System.out.println("Se ha producido un error. Inténtelo de nuevo");
             sqle.printStackTrace();
@@ -273,7 +270,7 @@ public class BBDD {
             System.out.println("Se ha producido un error. Inténtelo de nuevo");
             sqle.printStackTrace();
         }
-    }
+    }//Cierre metodo
     
     /**
      * Solicita la ciudad y la extensión individual mínima para mostrar los parques
@@ -304,7 +301,7 @@ public class BBDD {
             sqle.printStackTrace();
         }
         
-    }
+    }//Cierre metodo
     
     /**
      * Abre un menú para decidir el criterio de borrado. Solicita información según el criterio
@@ -390,5 +387,5 @@ public class BBDD {
             System.out.println("Se ha producido un error. Inténtelo de nuevo");
             sqle.printStackTrace();
         } 
-    }
+    }//Cierre metodo
 }

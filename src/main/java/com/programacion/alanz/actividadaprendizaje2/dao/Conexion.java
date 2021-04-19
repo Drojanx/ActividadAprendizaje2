@@ -4,10 +4,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-/**
- *
- * @author droja
- */
 public class Conexion {
     
     private Connection connection;
@@ -20,6 +16,9 @@ public class Conexion {
         return connection;
     }
     
+    /**
+     * Método que conecta el programa con la base de datos de SQL Developer
+     */
     public void conectar(){
         try{
             Class.forName(DRIVER);
@@ -31,6 +30,9 @@ public class Conexion {
         }
     }
     
+    /**
+     * Método que cierra la conexión con la base de datos
+     */
     public void desconectar(){
         try{
             connection.close();

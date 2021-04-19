@@ -1,12 +1,12 @@
 package com.programacion.alanz.actividadaprendizaje2.domain;
 
-/**
- *
- * @author droja
- */
 public class JRaso extends Jardinero {
 
     String jRasoJefeId;
+    
+    public JRaso(){
+        
+    }
 
     public String getjRasoJefeId() {
         return jRasoJefeId;
