@@ -4,10 +4,11 @@ package com.programacion.alanz.actividadaprendizaje2.dao;
  *
  * @author droja
  */
-public class JardineroDAO {
+public class ActuacionDAO {
     private Conexion conexion;
     
-    public JardineroDAO(Conexion conexion){
+    public ActuacionDAO(Conexion conexion){
         this.conexion = conexion;
     }
+
 }

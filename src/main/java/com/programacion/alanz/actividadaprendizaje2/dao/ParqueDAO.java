@@ -38,7 +38,7 @@ public class ParqueDAO {
             String sql = "INSERT INTO Parques (ID_Parque, ID_Ciudad, Parque_Nombre, Extension_m2) VALUES (?, ?, ?, ?)";
             PreparedStatement sentencia = conexion.getConexion().prepareStatement(sql);
             
-            sentencia = conexion.getConexion().prepareStatement(sql);
+            /*sentencia = conexion.getConexion().prepareStatement(sql);*/
             sentencia.setString(1, parque.getParqueId());
             sentencia.setString(2, parque.getParqueCiudadId());
             sentencia.setString(3, parque.getParqueNombre());

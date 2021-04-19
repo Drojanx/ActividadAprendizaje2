@@ -34,7 +34,6 @@ public class BBDD {
      * Menú de consola
      **/
     public void ejecutar(){ 
-        teclado = new Scanner(System.in);
         do {
             System.out.println("Aplicación ParKGestor");
             System.out.println("1. Buscar parques");
@@ -66,6 +65,7 @@ public class BBDD {
                 case "6":
                     ciudadesExtTotal();
                     break;
+                case "X":
                 case "x":
                     salir();
                     break;
@@ -241,8 +241,8 @@ public class BBDD {
         Parque parqueAux = new Parque(); //Guardaremos en este parque los datos nuevos
         try{
             System.out.println("Escriba el nombre del parque: ");
-            String Nombre = teclado.nextLine().toUpperCase();
-            String parqueNombre = existeCiudadCcaaParque(Nombre, opcion);
+            String nombre = teclado.nextLine().toUpperCase();
+            String parqueNombre = existeCiudadCcaaParque(nombre, opcion);
             Parque parqueReal = parqueDAO.obtenerParque(parqueNombre);
             System.out.print("Nombre:       ");
             System.out.println(parqueReal.getParqueNombre());
@@ -315,8 +315,8 @@ public class BBDD {
         String busqueda;
         System.out.println("Borrar por: ");
         System.out.println("    1.Ciudad (borrará todos los parques de dicha ciudad)");
-        System.out.println("    2.CCAA (borrará todos los parques de dicha ciudad)");
-        System.out.println("    3.ID del parque");
+        System.out.println("    2.CCAA (borrará todos los parques de dicha CCAA)");
+        System.out.println("    3.Nombre del parque");
 
         String opcion = teclado.nextLine();
         switch (opcion){

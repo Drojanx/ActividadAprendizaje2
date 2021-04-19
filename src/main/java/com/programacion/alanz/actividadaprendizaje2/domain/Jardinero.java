@@ -13,16 +13,6 @@ public class Jardinero {
     double jardineroSalario;
     String jardineroFechaContr;
 
-    public Jardinero(String jardineroId, String jardineroCuadrillaId, String jardineroNombre, String jardineroApellidos, String jardineroNumTfno, double jardineroSalario, String jardineroFechaContr) {
-        this.jardineroId = jardineroId;
-        this.jardineroCuadrillaId = jardineroCuadrillaId;
-        this.jardineroNombre = jardineroNombre;
-        this.jardineroApellidos = jardineroApellidos;
-        this.jardineroNumTfno = jardineroNumTfno;
-        this.jardineroSalario = jardineroSalario;
-        this.jardineroFechaContr = jardineroFechaContr;
-    }
-
     public String getJardineroId() {
         return jardineroId;
     }

@@ -1,10 +1,8 @@
 package com.programacion.alanz.actividadaprendizaje2.dao;
 
-import com.programacion.alanz.actividadaprendizaje2.domain.Ciudad;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 /**
  *

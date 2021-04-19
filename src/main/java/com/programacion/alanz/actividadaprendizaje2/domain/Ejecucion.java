@@ -4,13 +4,13 @@ package com.programacion.alanz.actividadaprendizaje2.domain;
  *
  * @author droja
  */
-public class Ejecutan {
+public class Ejecucion {
     String ejecutanActuacionId;
     String ejecutanCuadrillaId;
     String ejecutanFecha;
     double ejecutanHoras;
 
-    public Ejecutan(String ejecutanActuacionId, String ejecutanCuadrillaId, String ejecutanFecha, double ejecutanHoras) {
+    public Ejecucion(String ejecutanActuacionId, String ejecutanCuadrillaId, String ejecutanFecha, double ejecutanHoras) {
         this.ejecutanActuacionId = ejecutanActuacionId;
         this.ejecutanCuadrillaId = ejecutanCuadrillaId;
         this.ejecutanFecha = ejecutanFecha;
